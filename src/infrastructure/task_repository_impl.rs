@@ -1,15 +1,17 @@
-use crate::domain::{Repository, Task, TaskId, TaskRepositoryInMemory};
 use anyhow::Result;
 
-impl Repository for TaskRepositoryInMemory {
-  type Aggregate = Task;
-  type AggregateId = TaskId;
+use crate::domain::{Aggregate, Repository, Task, TaskId, TaskRepositoryInMemory};
 
-  fn resolve_by_id(&self, id: &Self::AggregateId) -> Result<Option<&Self::Aggregate>> {
+impl Repository for TaskRepositoryInMemory {
+  type AR = Task;
+  type AID = TaskId;
+
+  fn resolve_by_id(&self, id: &Self::AID) -> Result<Option<&Self::AR>> {
     Ok(self.aggregates.get(id))
   }
 
-  fn store(&mut self, aggregate: Self::Aggregate) -> Result<()> {
-    todo!()
+  fn store(&mut self, aggregate: Task) -> Result<()> {
+    self.aggregates.insert(aggregate.id().clone(), aggregate);
+    Ok(())
   }
 }

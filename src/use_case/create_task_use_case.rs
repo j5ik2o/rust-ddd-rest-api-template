@@ -21,6 +21,7 @@ impl CreateTaskUseCaseCommand {
   }
 }
 
+#[derive(Debug, Clone)]
 pub struct CreateTaskUseCaseResult {
   pub(crate) id: TaskId
 }
@@ -36,11 +37,11 @@ pub trait CreateTaskUseCase {
 }
 
 pub struct CreateTaskInteractor {
-  task_repository: Arc<Mutex<dyn Repository<AggregateId = TaskId, Aggregate = Task>>>,
+  task_repository: Arc<Mutex<dyn Repository<AID = TaskId, AR = Task>>>,
 }
 
 impl CreateTaskInteractor {
-  pub fn new(task_repository: Arc<Mutex<dyn Repository<AggregateId = TaskId, Aggregate = Task>>>) -> Self {
+  pub fn new(task_repository: Arc<Mutex<dyn Repository<AID = TaskId, AR = Task>>>) -> Self {
     Self { task_repository }
   }
 }

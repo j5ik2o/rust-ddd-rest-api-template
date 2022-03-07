@@ -1,13 +1,5 @@
-use crate::domain::task::{Task, TaskId};
-use anyhow::Result;
 use std::collections::HashMap;
-
-pub trait Repository: Send {
-  type AggregateId;
-  type Aggregate;
-  fn resolve_by_id(&self, id: &Self::AggregateId) -> Result<Option<&Self::Aggregate>>;
-  fn store(&mut self, aggregate: Self::Aggregate) -> Result<()>;
-}
+use crate::domain::{Task, TaskId};
 
 pub struct TaskRepositoryInMemory {
   pub(crate) aggregates: HashMap<TaskId, Task>,
