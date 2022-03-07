@@ -1,1 +1,3 @@
-# rust-ddd-template
+# rust-clean-architecture-template
+
+WIP
