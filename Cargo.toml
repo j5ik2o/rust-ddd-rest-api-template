@@ -1,12 +1,10 @@
-[package]
-name = "rust-ddd-template"
-version = "0.1.0"
-edition = "2021"
+[workspace]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+members = [
+    "domain",
+    "infrastructure",
+    "use-case",
+    "interface",
+    "app"
+]
 
-[dependencies]
-anyhow = "1.0.55"
-actix-web = "4"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"

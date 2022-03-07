@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/rust-ddd-template.iml" filepath="$PROJECT_DIR$/rust-ddd-template.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/rust-ca-template.iml" filepath="$PROJECT_DIR$/.idea/rust-ca-template.iml" />
     </modules>
   </component>
 </project>

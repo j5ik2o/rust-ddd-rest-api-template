@@ -1,10 +1,10 @@
-use crate::domain::Aggregate;
+use crate::Aggregate;
 
 #[derive(Debug, Clone, Eq, Hash, PartialEq)]
-pub struct TaskId(pub(crate) u64);
+pub struct TaskId(pub u64);
 
 #[derive(Debug, Clone, Eq, Hash, PartialEq)]
-pub struct TaskName(pub(crate) String);
+pub struct TaskName(pub String);
 
 #[derive(Debug, Clone, Eq, Hash, PartialEq)]
 pub struct Task {

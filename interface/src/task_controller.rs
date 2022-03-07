@@ -1,10 +1,8 @@
-use actix_web::{post, web, HttpRequest, HttpResponse, Responder, Result};
-
-use crate::domain::{TaskId, TaskName};
-use crate::use_case::{CreateTaskUseCase, CreateTaskUseCaseCommand};
-use crate::CreateTaskInteractor;
-
+use actix_web::{post, Responder, Result, web};
 use serde::{Deserialize, Serialize};
+
+use rust_ca_domain::{TaskId, TaskName};
+use rust_ca_use_case::{CreateTaskInteractor, CreateTaskUseCase, CreateTaskUseCaseCommand};
 
 #[derive(Debug, Deserialize)]
 pub struct CreateTaskParams {

@@ -1,0 +1,13 @@
+[package]
+name = "rust-ca-app"
+version = "0.0.1"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.55"
+actix-web = "4"
+rust-ca-interface = { version =  "0.0.1", path = "../interface" }
+rust-ca-infrastructure = { version =  "0.0.1", path = "../infrastructure" }
+rust-ca-use-case = { version =  "0.0.1", path = "../use-case" }

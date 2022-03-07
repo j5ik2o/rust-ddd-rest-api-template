@@ -1,8 +1,8 @@
-use crate::domain::{Repository, Task, TaskId, TaskName};
-use anyhow::*;
-use std::cell::RefCell;
-use std::rc::Rc;
 use std::sync::{Arc, Mutex};
+
+use anyhow::*;
+
+use rust_ca_domain::{Task, TaskId, TaskName, TaskRepository};
 
 #[derive(Debug, Clone)]
 pub struct CreateTaskUseCaseCommand {
@@ -20,7 +20,7 @@ impl CreateTaskUseCaseCommand {
 
 #[derive(Debug, Clone)]
 pub struct CreateTaskUseCaseResult {
-  pub(crate) id: TaskId,
+  pub id: TaskId,
 }
 
 impl CreateTaskUseCaseResult {
@@ -34,11 +34,11 @@ pub trait CreateTaskUseCase {
 }
 
 pub struct CreateTaskInteractor {
-  task_repository: Arc<Mutex<dyn Repository<AID = TaskId, AR = Task>>>,
+  task_repository: Arc<Mutex<dyn TaskRepository>>,
 }
 
 impl CreateTaskInteractor {
-  pub fn new(task_repository: Arc<Mutex<dyn Repository<AID = TaskId, AR = Task>>>) -> Self {
+  pub fn new(task_repository: Arc<Mutex<dyn TaskRepository>>) -> Self {
     Self { task_repository }
   }
 }
