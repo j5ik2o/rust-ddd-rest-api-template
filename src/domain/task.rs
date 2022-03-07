@@ -22,9 +22,6 @@ impl Aggregate for Task {
 
 impl Task {
   pub fn new(id: TaskId, name: TaskName) -> Self {
-    Self {
-      id,
-      name,
-    }
+    Self { id, name }
   }
 }

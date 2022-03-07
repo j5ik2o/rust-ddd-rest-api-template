@@ -14,16 +14,13 @@ unsafe impl Send for CreateTaskUseCaseCommand {}
 
 impl CreateTaskUseCaseCommand {
   pub fn new(id: TaskId, name: TaskName) -> Self {
-    Self {
-      id,
-      name
-    }
+    Self { id, name }
   }
 }
 
 #[derive(Debug, Clone)]
 pub struct CreateTaskUseCaseResult {
-  pub(crate) id: TaskId
+  pub(crate) id: TaskId,
 }
 
 impl CreateTaskUseCaseResult {
@@ -47,13 +44,13 @@ impl CreateTaskInteractor {
 }
 
 impl CreateTaskUseCase for CreateTaskInteractor {
-
   fn execute(&self, request: CreateTaskUseCaseCommand) -> Result<CreateTaskUseCaseResult> {
     let id = request.id.clone();
     let name = request.name.clone();
     let task = Task::new(id, name);
     let mut lock = self.task_repository.lock().unwrap();
-    lock.store(task).map(|_| CreateTaskUseCaseResult::new(request.id.clone()))
+    lock
+      .store(task)
+      .map(|_| CreateTaskUseCaseResult::new(request.id.clone()))
   }
-
 }

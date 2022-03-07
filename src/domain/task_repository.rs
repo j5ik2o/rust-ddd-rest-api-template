@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use crate::domain::{Task, TaskId};
+use std::collections::HashMap;
 
 pub struct TaskRepositoryInMemory {
   pub(crate) aggregates: HashMap<TaskId, Task>,

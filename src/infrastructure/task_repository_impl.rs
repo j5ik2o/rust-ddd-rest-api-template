@@ -3,8 +3,8 @@ use anyhow::Result;
 use crate::domain::{Aggregate, Repository, Task, TaskId, TaskRepositoryInMemory};
 
 impl Repository for TaskRepositoryInMemory {
-  type AR = Task;
   type AID = TaskId;
+  type AR = Task;
 
   fn resolve_by_id(&self, id: &Self::AID) -> Result<Option<&Self::AR>> {
     Ok(self.aggregates.get(id))
