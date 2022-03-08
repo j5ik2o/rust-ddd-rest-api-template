@@ -17,10 +17,9 @@ impl TaskRepositoryInMemory {
 }
 
 impl Repository for TaskRepositoryInMemory {
-    type AID = TaskId;
     type AR = Task;
 
-    fn resolve_by_id(&self, id: &Self::AID) -> Result<Option<&Self::AR>> {
+    fn resolve_by_id(&self, id: &<Self::AR as Aggregate>::ID) -> Result<Option<&Self::AR>> {
         Ok(self.aggregates.get(id))
     }
 

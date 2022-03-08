@@ -13,9 +13,9 @@ pub struct Task {
 }
 
 impl Aggregate for Task {
-  type AggregateId = TaskId;
+  type ID = TaskId;
 
-  fn id(&self) -> &Self::AggregateId {
+  fn id(&self) -> &Self::ID {
     &self.id
   }
 }
