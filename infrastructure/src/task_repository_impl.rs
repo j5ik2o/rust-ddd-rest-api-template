@@ -1,32 +1,31 @@
 use std::collections::HashMap;
+use std::rc::Rc;
 
 use anyhow::Result;
 
-use rust_ca_domain::{Aggregate, Repository, Task, TaskId, TaskRepository};
+use rust_ca_domain::{Aggregate, Task, TaskId, TaskRepository};
 
 pub struct TaskRepositoryInMemory {
-    pub aggregates: HashMap<TaskId, Task>,
+  pub aggregates: HashMap<TaskId, Rc<dyn Task<ID = TaskId>>>,
 }
+
+unsafe impl Send for TaskRepositoryInMemory {}
 
 impl TaskRepositoryInMemory {
-    pub fn new() -> Self {
-        Self {
-            aggregates: HashMap::new(),
-        }
+  pub fn new() -> Self {
+    Self {
+      aggregates: HashMap::new(),
     }
+  }
 }
 
-impl Repository for TaskRepositoryInMemory {
-    type AR = Task;
+impl TaskRepository for TaskRepositoryInMemory {
+  fn resolve_by_id(&self, id: &TaskId) -> Result<Option<&Rc<dyn Task<ID = TaskId>>>> {
+    Ok(self.aggregates.get(id).clone())
+  }
 
-    fn resolve_by_id(&self, id: &<Self::AR as Aggregate>::ID) -> Result<Option<&Self::AR>> {
-        Ok(self.aggregates.get(id))
-    }
-
-    fn store(&mut self, aggregate: Task) -> Result<()> {
-        self.aggregates.insert(aggregate.id().clone(), aggregate);
-        Ok(())
-    }
+  fn store(&mut self, aggregate: Rc<dyn Task<ID = TaskId>>) -> Result<()> {
+    self.aggregates.insert(aggregate.id().clone() as TaskId, aggregate);
+    Ok(())
+  }
 }
-
-impl TaskRepository for TaskRepositoryInMemory {}

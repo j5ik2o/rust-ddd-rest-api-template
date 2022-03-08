@@ -1,8 +1,11 @@
+use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 
 use anyhow::*;
+use chrono::Local;
 
-use rust_ca_domain::{Task, TaskId, TaskName, TaskRepository};
+use rust_ca_domain::{PostponeableUndoneTask, Task, TaskId, TaskName, TaskRepository, UndoneTask};
+use rust_ca_infrastructure::TaskRepositoryInMemory;
 
 #[derive(Debug, Clone)]
 pub struct CreateTaskUseCaseCommand {
@@ -47,10 +50,10 @@ impl CreateTaskUseCase for CreateTaskInteractor {
   fn execute(&self, request: CreateTaskUseCaseCommand) -> Result<CreateTaskUseCaseResult> {
     let id = request.id.clone();
     let name = request.name.clone();
-    let task = Task::new(id, name);
+    let task = PostponeableUndoneTask::new(id, name, Local::today() + chrono::Duration::days(1));
     let mut lock = self.task_repository.lock().unwrap();
     lock
-      .store(task)
+      .store(Rc::new(task))
       .map(|_| CreateTaskUseCaseResult::new(request.id.clone()))
   }
 }

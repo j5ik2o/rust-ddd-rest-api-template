@@ -1,3 +1,9 @@
-use crate::{Repository, Task, TaskId};
+use anyhow::Result;
+use std::rc::Rc;
 
-pub trait TaskRepository:  Repository<AR=Task> {}
+use crate::{Task, TaskId};
+
+pub trait TaskRepository: Send {
+  fn resolve_by_id(&self, id: &TaskId) -> Result<Option<&Rc<dyn Task<ID = TaskId>>>>;
+  fn store(&mut self, aggregate: Rc<dyn Task<ID = TaskId>>) -> Result<()>;
+}

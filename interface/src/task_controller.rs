@@ -1,4 +1,4 @@
-use actix_web::{post, Responder, Result, web};
+use actix_web::{post, web, Responder, Result};
 use serde::{Deserialize, Serialize};
 
 use rust_ca_domain::{TaskId, TaskName};

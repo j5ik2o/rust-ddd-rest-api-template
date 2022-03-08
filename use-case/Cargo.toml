@@ -7,5 +7,6 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.55"
+chrono = "0.4.19"
 rust-ca-infrastructure = { version =  "0.0.1", path = "../infrastructure" }
 rust-ca-domain = { version =  "0.0.1", path = "../domain" }

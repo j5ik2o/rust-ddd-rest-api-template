@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.55"
 actix-web = "4"
+rust-ca-domain = { version =  "0.0.1", path = "../domain" }
 rust-ca-interface = { version =  "0.0.1", path = "../interface" }
 rust-ca-infrastructure = { version =  "0.0.1", path = "../infrastructure" }
 rust-ca-use-case = { version =  "0.0.1", path = "../use-case" }
