@@ -1,8 +1,8 @@
-use std::rc::Rc;
-use std::sync::{Arc, Mutex};
-
 use anyhow::*;
 use chrono::Local;
+use mopa::*;
+use std::rc::Rc;
+use std::sync::{Arc, Mutex};
 
 use rust_ca_domain::{PostponeableUndoneTask, Task, TaskId, TaskName, TaskRepository, UndoneTask};
 use rust_ca_infrastructure::TaskRepositoryInMemory;
@@ -52,6 +52,13 @@ impl CreateTaskUseCase for CreateTaskInteractor {
     let name = request.name.clone();
     let task = PostponeableUndoneTask::new(id, name, Local::today() + chrono::Duration::days(1));
     let mut lock = self.task_repository.lock().unwrap();
+
+    // mopaを使ったダウンキャスト
+    let task_rc = lock.resolve_by_id(&TaskId(1)).unwrap().unwrap().clone();
+    task_rc
+      .downcast_ref::<PostponeableUndoneTask>()
+      .map(|task| task.postpone());
+
     lock
       .store(Rc::new(task))
       .map(|_| CreateTaskUseCaseResult::new(request.id.clone()))

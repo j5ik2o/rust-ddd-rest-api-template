@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate mopa;
+
 mod aggregate;
 mod task;
 mod task_repository;
