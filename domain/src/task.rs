@@ -71,9 +71,9 @@ impl PostponeableUndoneTask {
 
   pub fn postpone(&self) -> Rc<dyn UndoneTask> {
     if self.postpone_count < Self::POSTPONE_MAX_COUNT {
-      let mut r = self.clone();
-      r.due_date = r.due_date + chrono::Duration::days(1);
-      r.postpone_count += 1;
+      let mut new_task = self.clone();
+      new_task.due_date = new_task.due_date + chrono::Duration::days(1);
+      new_task.postpone_count += 1;
       Rc::new(r)
     } else {
       Rc::new(UndoneTaskWithDeadline::new(
