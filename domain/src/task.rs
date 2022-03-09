@@ -1,8 +1,9 @@
-use crate::Aggregate;
-use chrono::{Date, Local};
-use downcast_rs::{impl_downcast, Downcast};
-use mopa::*;
 use std::rc::Rc;
+
+use chrono::{Date, DateTime, Local, Utc};
+use downcast_rs::{impl_downcast, Downcast};
+
+use crate::Aggregate;
 
 #[derive(Debug, Clone, Eq, Hash, PartialEq)]
 pub enum TaskStatus {
@@ -24,7 +25,7 @@ pub trait Task: Aggregate<ID = TaskId> + Downcast {
 impl_downcast!(Task);
 
 pub trait UndoneTask: Task {
-  fn due_date(&self) -> &Date<Local>;
+  fn due_date(&self) -> &DateTime<Utc>;
   fn done(&self) -> DoneTask;
 }
 
@@ -35,7 +36,7 @@ pub struct PostponeableUndoneTask {
   id: TaskId,
   name: TaskName,
   status: TaskStatus,
-  due_date: Date<Local>,
+  due_date: DateTime<Utc>,
   postpone_count: u32,
 }
 
@@ -60,7 +61,7 @@ impl Task for PostponeableUndoneTask {
 impl PostponeableUndoneTask {
   const POSTPONE_MAX_COUNT: u32 = 3;
 
-  pub fn new(id: TaskId, name: TaskName, due_date: Date<Local>) -> Self {
+  pub fn new(id: TaskId, name: TaskName, due_date: DateTime<Utc>) -> Self {
     Self {
       id,
       name,
@@ -87,17 +88,12 @@ impl PostponeableUndoneTask {
 }
 
 impl UndoneTask for PostponeableUndoneTask {
-  fn due_date(&self) -> &Date<Local> {
+  fn due_date(&self) -> &DateTime<Utc> {
     &self.due_date
   }
 
   fn done(&self) -> DoneTask {
-    DoneTask::new(
-      self.id.clone(),
-      self.name.clone(),
-      self.due_date.clone(),
-      Local::today(),
-    )
+    DoneTask::new(self.id.clone(), self.name.clone(), self.due_date.clone(), Utc::now())
   }
 }
 
@@ -107,11 +103,11 @@ pub struct UndoneTaskWithDeadline {
   id: TaskId,
   name: TaskName,
   status: TaskStatus,
-  due_date: Date<Local>,
+  due_date: DateTime<Utc>,
 }
 
 impl UndoneTaskWithDeadline {
-  pub fn new(id: TaskId, name: TaskName, due_date: Date<Local>) -> Self {
+  pub fn new(id: TaskId, name: TaskName, due_date: DateTime<Utc>) -> Self {
     Self {
       id,
       name,
@@ -140,17 +136,12 @@ impl Task for UndoneTaskWithDeadline {
 }
 
 impl UndoneTask for UndoneTaskWithDeadline {
-  fn due_date(&self) -> &Date<Local> {
+  fn due_date(&self) -> &DateTime<Utc> {
     &self.due_date
   }
 
   fn done(&self) -> DoneTask {
-    DoneTask::new(
-      self.id.clone(),
-      self.name.clone(),
-      self.due_date.clone(),
-      Local::today(),
-    )
+    DoneTask::new(self.id.clone(), self.name.clone(), self.due_date.clone(), Utc::now())
   }
 }
 
@@ -161,12 +152,12 @@ pub struct DoneTask {
   id: TaskId,
   name: TaskName,
   status: TaskStatus,
-  due_date: Date<Local>,
-  done_date: Date<Local>,
+  due_date: DateTime<Utc>,
+  done_date: DateTime<Utc>,
 }
 
 impl DoneTask {
-  pub fn new(id: TaskId, name: TaskName, due_date: Date<Local>, done_date: Date<Local>) -> Self {
+  pub fn new(id: TaskId, name: TaskName, due_date: DateTime<Utc>, done_date: DateTime<Utc>) -> Self {
     Self {
       id,
       name,
@@ -176,7 +167,7 @@ impl DoneTask {
     }
   }
 
-  pub fn done_date(&self) -> &Date<Local> {
+  pub fn done_date(&self) -> &DateTime<Utc> {
     &self.done_date
   }
 }

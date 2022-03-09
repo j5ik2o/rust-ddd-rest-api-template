@@ -52,6 +52,7 @@ impl PostponeTaskUseCase for PostponeTaskInteractor {
   fn execute(&self, request: PostponeTaskUseCaseCommand) -> Result<PostponeTaskUseCaseResult> {
     let mut lock = self.task_repository.lock().unwrap();
     let task_rc = lock.resolve_by_id(&request.id).unwrap().unwrap().clone();
+
     match task_rc.downcast_ref::<PostponeableUndoneTask>() {
       Some(task) => lock
         .store(task.postpone())
