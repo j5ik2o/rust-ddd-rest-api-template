@@ -1,11 +1,14 @@
-use anyhow::*;
-use chrono::Local;
-use mopa::*;
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 
+use anyhow::*;
+use chrono::Local;
+
+use crate::TaskUseCaseError;
 use rust_ca_domain::{PostponeableUndoneTask, Task, TaskId, TaskName, TaskRepository, UndoneTask};
 use rust_ca_infrastructure::TaskRepositoryInMemory;
+
+use crate::TaskUseCaseError::RepositoryError;
 
 #[derive(Debug, Clone)]
 pub struct CreateTaskUseCaseCommand {
@@ -48,19 +51,20 @@ impl CreateTaskInteractor {
 
 impl CreateTaskUseCase for CreateTaskInteractor {
   fn execute(&self, request: CreateTaskUseCaseCommand) -> Result<CreateTaskUseCaseResult> {
-    let id = request.id.clone();
-    let name = request.name.clone();
-    let task = PostponeableUndoneTask::new(id, name, Local::today() + chrono::Duration::days(1));
     let mut lock = self.task_repository.lock().unwrap();
 
-    // mopaを使ったダウンキャスト
-    let task_rc = lock.resolve_by_id(&TaskId(1)).unwrap().unwrap().clone();
-    task_rc
-      .downcast_ref::<PostponeableUndoneTask>()
-      .map(|task| task.postpone());
+    let id = request.id.clone();
+    let name = request.name.clone();
+    let task_rc = Rc::new(PostponeableUndoneTask::new(
+      id,
+      name,
+      Local::today() + chrono::Duration::days(1),
+    ));
 
-    lock
-      .store(Rc::new(task))
-      .map(|_| CreateTaskUseCaseResult::new(request.id.clone()))
+    let result = lock
+      .store(task_rc)
+      .map_err(|_| anyhow::Error::new(TaskUseCaseError::RepositoryError))
+      .map(|_| CreateTaskUseCaseResult::new(request.id.clone()));
+    result
   }
 }

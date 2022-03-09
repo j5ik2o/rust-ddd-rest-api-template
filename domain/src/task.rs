@@ -1,5 +1,6 @@
 use crate::Aggregate;
 use chrono::{Date, Local};
+use downcast_rs::{impl_downcast, Downcast};
 use mopa::*;
 use std::rc::Rc;
 
@@ -15,12 +16,12 @@ pub struct TaskId(pub u64);
 #[derive(Debug, Clone, Eq, Hash, PartialEq)]
 pub struct TaskName(pub String);
 
-pub trait Task: Aggregate<ID = TaskId> + mopa::Any {
+pub trait Task: Aggregate<ID = TaskId> + Downcast {
   fn name(&self) -> &TaskName;
   fn status(&self) -> &TaskStatus;
 }
 
-mopafy!(Task);
+impl_downcast!(Task);
 
 pub trait UndoneTask: Task {
   fn due_date(&self) -> &Date<Local>;
@@ -74,7 +75,7 @@ impl PostponeableUndoneTask {
       let mut new_task = self.clone();
       new_task.due_date = new_task.due_date + chrono::Duration::days(1);
       new_task.postpone_count += 1;
-      Rc::new(r)
+      Rc::new(new_task)
     } else {
       Rc::new(UndoneTaskWithDeadline::new(
         self.id.clone(),
