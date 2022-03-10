@@ -3,7 +3,8 @@ use std::rc::Rc;
 
 use anyhow::Result;
 
-use rust_ca_domain::{Aggregate, Task, TaskId, TaskRepository};
+use rust_ca_domain::trait_base::Task;
+use rust_ca_domain::{Aggregate, TaskId, TaskRepository};
 
 pub struct TaskRepositoryInMemory {
   pub aggregates: HashMap<TaskId, Rc<dyn Task<ID = TaskId>>>,

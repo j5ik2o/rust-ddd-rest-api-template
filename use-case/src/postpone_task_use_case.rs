@@ -5,7 +5,8 @@ use anyhow::*;
 use chrono::Local;
 
 use crate::TaskUseCaseError;
-use rust_ca_domain::{PostponeableUndoneTask, Task, TaskId, TaskName, TaskRepository, UndoneTask};
+use rust_ca_domain::trait_base::PostponeableUndoneTask;
+use rust_ca_domain::{TaskId, TaskName, TaskRepository};
 use rust_ca_infrastructure::TaskRepositoryInMemory;
 
 use crate::TaskUseCaseError::RepositoryError;

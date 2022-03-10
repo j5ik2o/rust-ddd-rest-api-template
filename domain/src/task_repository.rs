@@ -1,7 +1,8 @@
-use anyhow::Result;
 use std::rc::Rc;
 
-use crate::{Task, TaskId};
+use crate::trait_base::Task;
+use crate::TaskId;
+use anyhow::Result;
 
 pub trait TaskRepository: Send {
   fn resolve_by_id(&self, id: &TaskId) -> Result<Option<&Rc<dyn Task>>>;
