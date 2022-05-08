@@ -2,6 +2,10 @@
   "extends": [
     "config:base"
   ],
+  "cargo": {
+    "enabled": true
+  },
+  "platformAutomerge": true,
   "packageRules": [
     {
       "matchUpdateTypes": [
