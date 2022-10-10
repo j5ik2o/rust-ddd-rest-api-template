@@ -3,6 +3,7 @@
 use thiserror::Error;
 
 pub use create_task_use_case::*;
+pub use postpone_task_use_case::*;
 
 mod create_task_use_case;
 mod postpone_task_use_case;
