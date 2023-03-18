@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 chrono = "0.4.24"
-anyhow = "1.0.69"
+anyhow = "1.0.70"
 thiserror = "1.0"
 downcast-rs = "1.2.0"
 rust-ca-infrastructure = { version =  "0.0.1", path = "../infrastructure" }
