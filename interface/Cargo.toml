@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 chrono = { version = "0.4.34", features = ["serde"] }
-anyhow = "1.0.79"
+anyhow = "1.0.80"
 actix-web = "4"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
