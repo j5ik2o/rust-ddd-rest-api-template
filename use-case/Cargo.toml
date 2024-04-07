@@ -9,6 +9,6 @@ edition = "2021"
 chrono = "0.4.37"
 anyhow = "1.0.81"
 thiserror = "1.0"
-downcast-rs = "1.2.0"
+downcast-rs = "1.2.1"
 rust-ca-infrastructure = { version =  "0.0.1", path = "../infrastructure" }
 rust-ca-domain = { version =  "0.0.1", path = "../domain" }
