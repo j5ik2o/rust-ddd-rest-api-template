@@ -22,5 +22,6 @@
       ],
       "automerge": true
     }
-  ]
+  ],
+  "enabled": false
 }
